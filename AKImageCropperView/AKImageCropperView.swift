@@ -563,10 +563,11 @@ open class AKImageCropperView: UIView, UIScrollViewDelegate, UIGestureRecognizer
     
     open func rotate(_ angle: Double, withDuration duration: TimeInterval = 0, options: UIViewAnimationOptions = .curveEaseInOut, completion: ((Bool) -> Void)? = nil) {
         
+        /*
         guard angle.truncatingRemainder(dividingBy: M_PI_2) == 0 else {
             return
         }
-        
+        */ 
         self.angle = angle
         savedProperty.save(scrollView: scrollView)
         
