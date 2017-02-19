@@ -563,11 +563,10 @@ open class AKImageCropperView: UIView, UIScrollViewDelegate, UIGestureRecognizer
     
     open func rotate(_ angle: Double, withDuration duration: TimeInterval = 0, options: UIViewAnimationOptions = .curveEaseInOut, completion: ((Bool) -> Void)? = nil) {
         
-        /*
         guard angle.truncatingRemainder(dividingBy: M_PI_2) == 0 else {
             return
         }
-        */ 
+ 
         self.angle = angle
         savedProperty.save(scrollView: scrollView)
         
@@ -587,6 +586,15 @@ open class AKImageCropperView: UIView, UIScrollViewDelegate, UIGestureRecognizer
         } else {
             UIView.animate(withDuration: duration, delay: 0, options: options, animations: _animations, completion: _completion)
         }
+    }
+    
+    open func straighten(_ angle: Double) {
+        guard let cgImage = self.image?.cgImage else { return }
+        let rotated = CIImage(cgImage: cgImage).applyingFilter("CIStraightenFilter",
+                                           withInputParameters: [ kCIInputAngleKey: angle ])
+        let rotatedImage = UIImage(ciImage: rotated)
+        scrollView.image = rotatedImage
+        overlayView?.image = rotatedImage
     }
     
     // MARK: Reset
