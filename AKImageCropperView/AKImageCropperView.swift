@@ -589,12 +589,16 @@ open class AKImageCropperView: UIView, UIScrollViewDelegate, UIGestureRecognizer
     }
     
     open func straighten(_ angle: Double) {
-        guard let cgImage = self.image?.cgImage else { return }
-        let rotated = CIImage(cgImage: cgImage).applyingFilter("CIStraightenFilter",
-                                           withInputParameters: [ kCIInputAngleKey: angle ])
+        var ciImage = self.image?.ciImage
+        if ciImage == nil, let cgImage = self.image?.cgImage {
+            ciImage = CIImage(cgImage: cgImage)
+        }
+        guard let theImage = ciImage else { return }
+        let rotated = theImage.applyingFilter("CIStraightenFilter",
+                                              withInputParameters: [ kCIInputAngleKey: angle ])
         let rotatedImage = UIImage(ciImage: rotated)
-        scrollView.image = rotatedImage
-        overlayView?.image = rotatedImage
+        let currentProperty = savedProperty
+        image = rotatedImage
     }
     
     // MARK: Reset
